@@ -32,3 +32,5 @@ use the editor.
 ## Prototype architecture
 - Keep simulated ticket classification in a browser-safe shared module and ticket state in the main experience; this frontend prototype needs no external AI or persistence service.
 - Use top navigation to switch the two prototype views within the home route so submitted reports remain in shared React state.
+- Keep dashboard filters and shared ticket presentation in focused components, with status transitions and metrics in the shared triage module, so desktop and mobile reports use identical rules.
+- Apply the user-selected theme on the document element after hydration, and keep GPS permission requests behind a citizen action with explicitly labeled demo coordinates as a fallback.

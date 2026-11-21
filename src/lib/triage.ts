@@ -11,10 +11,35 @@ export type Ticket = {
   location: string;
   time: string;
   photo?: string;
+  status?: 'Open' | 'Assigned' | 'Resolved';
+  team?: string;
+  coordinates?: { latitude: number; longitude: number; simulated: boolean };
 };
 export const severityRank: Record<Severity, number> = { Critical: 0, High: 1, Medium: 2, Low: 3 };
 export function sortTickets(tickets: Ticket[]) {
   return [...tickets].sort((a, b) => severityRank[a.severity] - severityRank[b.severity]);
+}
+export function updateTicketStatus(ticket: Ticket, action: 'assign' | 'resolve'): Ticket {
+  if (ticket.status === 'Resolved') return ticket;
+  return action === 'resolve'
+    ? { ...ticket, status: 'Resolved' }
+    : { ...ticket, status: 'Assigned', team: `${ticket.category} Response Team` };
+}
+export function getTicketMetrics(tickets: Ticket[]) {
+  const open = tickets.filter(ticket => ticket.status !== 'Resolved');
+  return {
+    open: open.length,
+    critical: open.filter(ticket => ticket.severity === 'Critical').length,
+    savedMinutes: Math.round(tickets.length * (300 - TRIAGE_DELAY_MS / 1000) / 60),
+  };
+}
+export function filterTickets(tickets: Ticket[], filters: { search: string; department: string; severity: string; category: string; status: string }) {
+  return sortTickets(tickets).filter(ticket =>
+    (filters.department === 'All departments' || ticket.department === filters.department) &&
+    (filters.severity === 'All priorities' || ticket.severity === filters.severity) &&
+    (filters.category === 'All categories' || ticket.category === filters.category) &&
+    (filters.status === 'All statuses' || (filters.status === 'Open' ? ticket.status !== 'Resolved' : ticket.status === 'Resolved')) &&
+    `${ticket.text} ${ticket.id} ${ticket.location} ${ticket.department}`.toLowerCase().includes(filters.search.toLowerCase()));
 }
 export const departments: Record<Category, string> = {
   Roads: 'Public Works Department', Waste: 'Solid Waste Management', Water: 'Water & Sanitation Dept',

@@ -28,3 +28,7 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## Prototype architecture
+- Keep simulated ticket classification in a browser-safe shared module and ticket state in the main experience; this frontend prototype needs no external AI or persistence service.
+- Use top navigation to switch the two prototype views within the home route so submitted reports remain in shared React state.

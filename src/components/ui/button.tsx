@@ -9,6 +9,9 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
+        triage: "bg-primary text-primary-foreground shadow-elegant hover:bg-primary/90",
+        nav: "text-muted-foreground hover:bg-secondary hover:text-foreground shadow-none",
+        navActive: "bg-card text-primary shadow-sm",
         default: "bg-primary text-primary-foreground shadow hover:bg-primary/90",
         destructive: "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
         outline:
